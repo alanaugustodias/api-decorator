@@ -1,0 +1,63 @@
+{
+    "name": "api-decorator",
+    "version": "0.1.0",
+    "description": "Node API Decorator",
+    "main": "dist/index.js",
+    "type": "module",
+    "scripts": {
+        "clean": "rimraf dist/*",
+        "build": "npm run clean && tsc",
+        "lint": "eslint --ignore-pattern libs-polyfills src/**/*.ts",
+        "test": "npm run build && cross-env JEST_ENV=unit jest --testPathPattern=dist/",
+        "test:watch": "npm run test && cross-env JEST_ENV=unit jest --testPathPattern=dist/ --watch",
+        "test:coverage": "npm run build && cross-env JEST_ENV=unit jest --testPathPattern=dist/ --coverage --colors"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:alanaugustodias/api-decorator.git"
+    },
+    "keywords": [
+        "api-decorator",
+        "annotations",
+        "api",
+        "rest",
+        "restful"
+    ],
+    "author": "Alan Dias",
+    "contributors": [
+        "@alanaugustodias"
+    ],
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/alanaugustodias/api-decorator/issues"
+    },
+    "homepage": "https://github.com/alanaugustodias/api-decorator/blob/main/README.md",
+    "engines": {
+        "node": ">=10.0.0"
+    },
+    "devDependencies": {
+        "@babel/plugin-transform-modules-commonjs": "^7.10.1",
+        "@babel/preset-env": "^7.10.3",
+        "@types/config": "0.0.38",
+        "@types/express": "^4.17.6",
+        "@types/jest": "^26.0.0",
+        "@typescript-eslint/eslint-plugin": "^4.13.0",
+        "@typescript-eslint/parser": "^4.13.0",
+        "babel-jest": "^26.0.1",
+        "eslint": "^7.3.0",
+        "eslint-plugin-jest": "^24.1.3 ",
+        "eslint-plugin-node": "^11.1.0",
+        "jest": "^26.0.1",
+        "nodemon": "^2.0.4",
+        "prettier": "^2.2.1",
+        "reflect-metadata": "^0.1.13",
+        "rimraf": "^3.0.2",
+        "typescript": "4.1.3"
+    },
+    "perDependencies": {
+        "express": "^4.17.1"
+    },
+    "dependencies": {
+        "cosmiconfig": "^7.0.0"
+    }
+}
