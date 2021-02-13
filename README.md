@@ -1,62 +1,103 @@
-# Financefy API | Powered by @DriKawa
+# Node API Decorator
 
-Finances Organizer made For You
+Elegant decorators that make your API easy and classy.
+
+___
+
+### Table of Contents
+**[Motivation](#motivation)**<br>
+**[Getting Started](#getting-started)**<br>
+**[Configs](#configs)**<br>
+
+## Motivation
+
+Thinking of a cleaner way of developing NodeJs APIs, Node API Decorator was created.
+
+When developing Node APIs using [Express](https://expressjs.com/), some steps are required in order to achive the basic usage of the tool:
+
+-   Creating the router
+
+`const router = express.Router();`
+
+-   Vinculating the API resources
+
+`router.get('my-api-resource', function(request, response) {});`
+
+-   Attaching the router to the server
+
+`server.use('api-base-path', router);`
+
+This is not a difficult thing to do, but in terms os scalability and readability things might get a bit hard to maintain.
+
+When designing the structure of your API, one of the common concerns is: having a simple way to handle routes (resources).
+
+This not only involves declaring the resources, but also receiving the content from a Request and returning to a Response.
+
+That's the main purpose of this library: to help you improving the quality of your code by structuring the basics for you.
 
 ---
 
-Some of the libraries that make this work:
+## Getting Started
 
-- [Typescript](https://www.typescriptlang.org/)
+`npm install api-decorator`
 
-- [Nodemon](https://www.npmjs.com/package/nodemon)
+To start using the decorators for the API (resources), you should firstly follow a minimum standard, so that this library can do its best to help you out.
 
-- [Jest](https://jestjs.io/)
+### Controllers
 
-- [Express](https://expressjs.com/)
+I'm calling here *Controllers* the files where you're about to put your resources declarations.
 
-- [ESLint](https://eslint.org/)
+They must export as default a class, which will be instantiated and associated on Express.
 
-## Requirements
+Example of a Controller:
 
-As for the latest versions mentioned above, NodeJs must be on 14, at least.
-Also, by having Typescript as dev-dependency, there's no need to install it globally, if you don't want to.
+```javascript
+// controllers/user.controller.js
+import {Controller, Post, Get, Body, Query} from 'api-decorator';
 
-## Usage
+@Controller('/user')
+export default class UserController {
+    @Post()
+    createUser(@Body() user) {
+        return this.userService.create(user);
+    }
 
-To start using this example, you can clone it and try the scripts below:
+    @Get('/custom-get')
+    customGetUser(@Query() query) {
+        return this.userService.get(query);
+    }
+}
+```
 
-- `npm install`: Install all dependencies of this code
+By declaring the `@Controller` with `'/user'`, we are attaching this route on Express with this prefix.
 
-- `npm run dev`: Transpile TS files into JS, and start Nodemon on dist/index.js
+The same way that when declaring `@Get` with `'/custom-get'`, we are attaching the concatenation of `/user` + `/custom-get`.
 
-- `npm run dev:watch`: Transpile TS files into JS, and start Nodemon in watch mode, on dist/index.js
+After having your controllers created, you should export them in a `index` file, just like below:
 
-- `npm run start`: Start Node on dist/index.js
+```javascript
+// controllers/index.js
+export {default as UserController} from './user.controller.js';
+```
 
-- `npm run test`: Transpile TS files into JS, and start Jest
+Now, you only have to tell *api-decorator* where your main controllers exporter is located.
 
-- `npm run test:watch`: Transpile TS files into JS, and start Jest in watch mode
+You can create a config file, according to the [Configs](#configs) section.
 
-- `npm run test:coverage`: Transpile TS files into JS, and start Jest in coverage mode
+---
 
-- `npm run lint`: Start ESLint validations
+## Configs
 
-- `npm run compile`: Transpile TS files into JS and start Node on dist/index.js (used for `dev:watch`)
+You can create a file `.apidecoratorrc` on the root folder of your project, and put there the configurations you need.
 
-- `npm run clean`: Clean dist folder
+Example of a file:
 
-## Structure basis
+```json
+{
+  "controllers": "src/controllers/index.js"
+}
+```
 
-To start this project, a bunch of tutorials and discussions were used as base to put this all together.
-
-You can take a look at some of them here:
-
-- [Modern TypeScript project template](https://github.com/dandv/typescript-modern-project#import-your-own-modules-without-specifying-an-extension)
-
-- [Jest Issue #9395](https://github.com/facebook/jest/issues/9395)
-
-- [Typescript configuration for NodeJs 14](https://stackoverflow.com/questions/61305578/what-typescript-configuration-produces-output-closest-to-node-js-14-capabilities/61305579#61305579?newreg=ecb2031857884ee1b4185b7b9a4f59c8)
-
-## Discussions
-
-You are free to reach us at anytime to ask/contribute on any relevant related content.
+| Key    | Description    | Example | Mandatory    | Default Value    |
+| ------ | -------------- | ------- | :------------: | :----------------: |
+| controllers | The path for your controllers exporters | "src/controllers/index.js" | Yes | - |
