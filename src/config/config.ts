@@ -6,6 +6,9 @@ let config: {
     controllers: string;
 };
 
+/**
+ * Start the Config file
+ */
 export function initConfig() {
     const configResult = cosmiconfigSync('apidecorator').search();
     config = configResult ? configResult.config : {};
@@ -15,6 +18,9 @@ export function getConfig() {
     return config;
 }
 
+/**
+ * Import the Controllers according to the path provided on the Config file
+ */
 export async function getControllers(): Promise<any[]> {
     const controllersPath = getConfig().controllers || '';
     if (!controllersPath) {

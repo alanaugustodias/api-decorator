@@ -1,21 +1,15 @@
-import { RouteParam } from '../interfaces/index.js';
-import { RouteParamType } from '../enum/index.js';
+import {RouteParam} from '../interfaces/index.js';
+import {RouteParamType} from '../enum/index.js';
 
 type RouteParamBuilder = {
-    type: RouteParamType,
-    target: any,
-    propertyKey: string,
-    index: number,
-    pathName?: string
+    type: RouteParamType;
+    target: any;
+    propertyKey: string | symbol;
+    index: number;
+    pathName?: string;
 };
 
-function routeParamBuilder({
-    type,
-    target,
-    propertyKey,
-    index,
-    pathName
-}: RouteParamBuilder) {
+function buildRouteParam({type, target, propertyKey, index, pathName}: RouteParamBuilder) {
     if (!Reflect.hasMetadata('routeParams', target.constructor)) {
         Reflect.defineMetadata('routeParams', [], target.constructor);
     }
@@ -28,20 +22,19 @@ function routeParamBuilder({
         requestRouteParam.params.push({
             index,
             type,
-            pathName
+            pathName,
         });
         routeParams[requestRouteParamIdx] = requestRouteParam;
-    }
-    else {
+    } else {
         requestRouteParam = {
             methodName: propertyKey,
             params: [
                 {
                     index,
                     type,
-                    pathName
-                }
-            ]
+                    pathName,
+                },
+            ],
         };
         routeParams.push(requestRouteParam);
     }
@@ -49,58 +42,58 @@ function routeParamBuilder({
     Reflect.defineMetadata('routeParams', routeParams, target.constructor);
 }
 
-export const Req = () => {
-    return (target: any, propertyKey: string, index: number): void => {
-        routeParamBuilder({
+export const Req = (): ParameterDecorator => {
+    return (target: any, propertyKey: string | symbol, index: number): void => {
+        buildRouteParam({
             type: RouteParamType.REQUEST,
             target,
             propertyKey,
-            index
+            index,
         });
     };
 };
 
-export const Res = () => {
-    return (target: any, propertyKey: string, index: number): void => {
-        routeParamBuilder({
+export const Res = (): ParameterDecorator => {
+    return (target: any, propertyKey: string | symbol, index: number): void => {
+        buildRouteParam({
             type: RouteParamType.RESPONSE,
             target,
             propertyKey,
-            index
+            index,
         });
     };
 };
 
-export const Body = () => {
-    return (target: any, propertyKey: string, index: number): void => {
-        routeParamBuilder({
+export const Body = (): ParameterDecorator => {
+    return (target: any, propertyKey: string | symbol, index: number): void => {
+        buildRouteParam({
             type: RouteParamType.BODY,
             target,
             propertyKey,
-            index
+            index,
         });
     };
 };
 
-export const Query = () => {
-    return (target: any, propertyKey: string, index: number): void => {
-        routeParamBuilder({
+export const Query = (): ParameterDecorator => {
+    return (target: any, propertyKey: string | symbol, index: number): void => {
+        buildRouteParam({
             type: RouteParamType.QUERY,
             target,
             propertyKey,
-            index
+            index,
         });
     };
 };
 
-export const Path = (pathName: string) => {
-    return (target: any, propertyKey: string, index: number): void => {
-        routeParamBuilder({
+export const Path = (pathName: string): ParameterDecorator => {
+    return (target: any, propertyKey: string | symbol, index: number): void => {
+        buildRouteParam({
             type: RouteParamType.PATH,
             target,
             propertyKey,
             index,
-            pathName
+            pathName,
         });
     };
 };

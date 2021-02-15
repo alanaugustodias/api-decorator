@@ -1,19 +1,14 @@
-import { Route } from '../interfaces/index.js';
-import { RouteMethods } from '../enum/index.js';
+import {Route} from '../interfaces/index.js';
+import {RouteMethods} from '../enum/index.js';
 
 type RouteBuilder = {
-    path: string,
-    method: RouteMethods,
-    target: any,
-    propertyKey: string
+    path: string;
+    method: RouteMethods;
+    target: any;
+    propertyKey: string | symbol;
 };
 
-function routeBuilder({
-    path,
-    method,
-    target,
-    propertyKey
-}: RouteBuilder) {
+function buildRoute({path, method, target, propertyKey}: RouteBuilder) {
     if (!Reflect.hasMetadata('routes', target.constructor)) {
         Reflect.defineMetadata('routes', [], target.constructor);
     }
@@ -23,51 +18,51 @@ function routeBuilder({
     routes.push({
         requestMethod: method,
         path,
-        methodName: propertyKey
+        methodName: propertyKey,
     });
     Reflect.defineMetadata('routes', routes, target.constructor);
 }
 
-export const Get = (path = '') => {
-    return (target: any, propertyKey: string): void => {
-        routeBuilder({
+export const Get = (path = ''): MethodDecorator => {
+    return (target: any, propertyKey: string | symbol): void => {
+        buildRoute({
             path,
             method: RouteMethods.get,
             target,
-            propertyKey
+            propertyKey,
         });
     };
 };
 
-export const Post = (path = '') => {
-    return (target: any, propertyKey: string): void => {
-        routeBuilder({
+export const Post = (path = ''): MethodDecorator => {
+    return (target: any, propertyKey: string | symbol): void => {
+        buildRoute({
             path,
             method: RouteMethods.post,
             target,
-            propertyKey
+            propertyKey,
         });
     };
 };
 
-export const Put = (path = '') => {
-    return (target: any, propertyKey: string): void => {
-        routeBuilder({
+export const Put = (path = ''): MethodDecorator => {
+    return (target: any, propertyKey: string | symbol): void => {
+        buildRoute({
             path,
             method: RouteMethods.put,
             target,
-            propertyKey
+            propertyKey,
         });
     };
 };
 
-export const Delete = (path = '') => {
-    return (target: any, propertyKey: string): void => {
-        routeBuilder({
+export const Delete = (path = ''): MethodDecorator => {
+    return (target: any, propertyKey: string | symbol): void => {
+        buildRoute({
             path,
             method: RouteMethods.delete,
             target,
-            propertyKey
+            propertyKey,
         });
     };
 };

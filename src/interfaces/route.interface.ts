@@ -7,12 +7,12 @@ export interface Param {
 }
 
 export interface RouteParam {
-    methodName: string;
+    methodName: string | symbol;
     params: Param[];
 }
 
 export interface Route {
     path: string;
     requestMethod: RouteMethods;
-    methodName: string;
+    methodName: string | symbol;
 }

@@ -8,9 +8,9 @@
         "clean": "rimraf dist/*",
         "build": "npm run clean && tsc",
         "lint": "eslint --ignore-pattern libs-polyfills src/**/*.ts",
-        "test": "npm run build && cross-env JEST_ENV=unit jest --testPathPattern=dist/",
-        "test:watch": "npm run test && cross-env JEST_ENV=unit jest --testPathPattern=dist/ --watch",
-        "test:coverage": "npm run build && cross-env JEST_ENV=unit jest --testPathPattern=dist/ --coverage --colors"
+        "test": "npm run build && jest",
+        "test:watch": "npm run test && jest --watch",
+        "test:coverage": "npm run build && jest --coverage --colors"
     },
     "repository": {
         "type": "git",

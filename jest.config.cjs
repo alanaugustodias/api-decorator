@@ -1,5 +1,6 @@
 module.exports = {
     testEnvironment: 'node',
+    roots: ['<rootDir>/dist'],
     transform: {
         '^.+\\.jsx?$': 'babel-jest'
     },
@@ -16,6 +17,5 @@ module.exports = {
     collectCoverageFrom: [
         'dist/**/*.{js,jsx}',
         '!dist/**/index.{js,jsx}',
-        '!dist/startup/**/*.{js,jsx}'
     ]
 };
