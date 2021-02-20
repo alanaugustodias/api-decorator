@@ -69,7 +69,7 @@ I'm calling here _Controllers_ the files where you're about to put your resource
 
 They must export as default a class, which will be instantiated and associated on Express.
 
-#### Project structure sample:
+- Project structure sample:
 
 ```
 src
@@ -79,7 +79,7 @@ src
 |   index.ts
 ```
 
-#### Example of a Controller:
+- Example of a Controller:
 
 ```javascript
 // controllers/user.controller.js
@@ -114,7 +114,7 @@ Now, you only have to tell _api-decorator_ where your main controllers exporter 
 
 You can create a config file, according to the [Configs](#configs) section.
 
-#### Example of a startup file (`index.ts`)
+- Example of a startup file (`index.ts`)
 
 ```javascript
 import express from 'express';
@@ -153,7 +153,7 @@ After having the result of the asynchronous `BindRoutes`, you can just use it wi
 
 As part of the experimental decorators, we have `@Injectables` and `@Inject`.
 
-#### `@Injectable``
+- `@Injectable``
 
 This decorator is meant to be used on a class you'd like to use its reference injected on a class attribute.
 
@@ -174,7 +174,7 @@ class MyService {
 
 This will add to the injector service an instance of `MyService` tracked by `Symbol.for('MyService')`,
 
-#### `@Inject`
+- `@Inject`
 
 This decorator injects an instance of an injectable class.
 
@@ -193,7 +193,7 @@ class MyClass {
 
 This will retrieve the instance for `MyService` within the injector controller.
 
-#### Pro-tip
+- Pro-tip
 
 In order to maintain the injectables names more legible, you could create a constant for that:
 
