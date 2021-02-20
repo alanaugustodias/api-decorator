@@ -39,6 +39,7 @@
     "devDependencies": {
         "@babel/plugin-transform-modules-commonjs": "^7.10.1",
         "@babel/preset-env": "^7.10.3",
+        "@jest-mock/express": "^1.4.0",
         "@types/config": "0.0.38",
         "@types/express": "^4.17.6",
         "@types/jest": "^26.0.0",

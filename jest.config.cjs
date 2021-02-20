@@ -12,7 +12,7 @@ module.exports = {
             statements: 80
         }
     },
-    moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+    moduleFileExtensions: ['js', 'jsx', 'json', 'node'],
     coverageReporters: ['json', 'lcov', 'text', 'clover'],
     collectCoverageFrom: [
         'dist/**/*.{js,jsx}',

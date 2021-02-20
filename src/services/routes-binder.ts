@@ -23,14 +23,26 @@ export default async function BindRoutes(): Promise<Router> {
         routes.forEach((route) => {
             router[route.requestMethod](prefix + route.path, async (req: Request, res: Response) => {
                 try {
+                    // Parameters for the endpoint
                     const paramsMap = transformRouteParams(routeParams, route.methodName, req, res);
+
+                    // Method on the controller class to be executed
                     const routeMethod = getRouteMethod(route.methodName.toString())(instance);
+
+                    // Result for the endpoint's method
                     const result = await routeMethod.apply(Object.getPrototypeOf(instance), paramsMap);
-                    return res.status(SucessfulRouteStatus[route.requestMethod]).send(result);
-                }
-                catch (error) {
-                    console.error(error);
-                    return res.status(400).send('The request could not be processed');
+
+                    // If no status is set on the Response, the default one is
+                    if (!res.statusCode) {
+                        res.status(SucessfulRouteStatus[route.requestMethod]);
+                    }
+
+                    return res.send(result);
+                } catch (error) {
+                    if (!res.statusCode) {
+                        res.status(400);
+                    }
+                    return res.send(error);
                 }
             });
         });
