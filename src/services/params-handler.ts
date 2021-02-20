@@ -3,16 +3,6 @@ import {Request, Response} from 'express';
 
 import {RouteParamType} from '../enum/index.js';
 
-function sortByIndex(paramA: Param, paramB: Param): number {
-    if (paramA.index < paramB.index) {
-        return -1;
-    }
-    if (paramA.index > paramB.index) {
-        return 1;
-    }
-    return 0;
-}
-
 /**
  * Map all parameters and return an array of final values for thems
  * @param {Param[]} params
@@ -29,7 +19,7 @@ function mapParams(params: Param[], req: Request, res: Response): any[] {
             [RouteParamType.REQUEST]: req,
             [RouteParamType.RESPONSE]: res,
             [RouteParamType.BODY]: req.body,
-            [RouteParamType.QUERY]: req.query,
+            [RouteParamType.QUERY]: req.query
         };
 
         return routeParams[type];
@@ -43,12 +33,15 @@ function mapParams(params: Param[], req: Request, res: Response): any[] {
  * @param {Request} req
  * @param {Response} res
  */
-export function transformRouteParams(routeParams: Array<RouteParam>, methodName: string | symbol, req: Request, res: Response) {
+export function transformRouteParams(
+    routeParams: Array<RouteParam>,
+    methodName: string | symbol,
+    req: Request,
+    res: Response
+) {
     const paramsOnRoute = routeParams ? routeParams.find((routeParam) => routeParam.methodName === methodName) : null;
-    let paramsList = [];
     if (paramsOnRoute?.params?.length) {
-        paramsOnRoute.params.sort(sortByIndex);
-        paramsList = mapParams(paramsOnRoute.params, req, res);
+        return mapParams(paramsOnRoute.params, req, res);
     }
-    return paramsList;
+    return [];
 }

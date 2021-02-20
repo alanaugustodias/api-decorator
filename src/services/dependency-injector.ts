@@ -15,7 +15,7 @@ class DependencyInjector {
             const serviceInstance = new service();
             this.services.push({
                 identifier,
-                service: serviceInstance,
+                service: serviceInstance
             });
         }
     }

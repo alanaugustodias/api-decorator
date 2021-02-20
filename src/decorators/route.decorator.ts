@@ -1,5 +1,7 @@
+import {ApiPrefix, RouteMethods} from '../enum/index.js';
+
 import {Route} from '../interfaces/index.js';
-import {RouteMethods} from '../enum/index.js';
+import {handlePathSlash} from '../services/path-utils.js';
 
 type RouteBuilder = {
     path: string;
@@ -9,18 +11,25 @@ type RouteBuilder = {
 };
 
 function buildRoute({path, method, target, propertyKey}: RouteBuilder) {
-    if (!Reflect.hasMetadata('routes', target.constructor)) {
-        Reflect.defineMetadata('routes', [], target.constructor);
+    if (!Reflect.hasMetadata(ApiPrefix.ROUTES, target.constructor)) {
+        Reflect.defineMetadata(ApiPrefix.ROUTES, [], target.constructor);
     }
 
-    const routes = Reflect.getMetadata('routes', target.constructor) as Array<Route>;
+    const routes = Reflect.getMetadata(ApiPrefix.ROUTES, target.constructor) as Array<Route>;
+
+    const existentRoute = routes.find(({methodName}) => methodName === propertyKey);
+    if (existentRoute) {
+        throw new Error(
+            `This method was already decorated with a ${existentRoute.requestMethod.toUpperCase()} method. Only one Route decorator is allowed per method.`
+        );
+    }
 
     routes.push({
         requestMethod: method,
-        path,
-        methodName: propertyKey,
+        path: handlePathSlash(path),
+        methodName: propertyKey
     });
-    Reflect.defineMetadata('routes', routes, target.constructor);
+    Reflect.defineMetadata(ApiPrefix.ROUTES, routes, target.constructor);
 }
 
 export const Get = (path = ''): MethodDecorator => {
@@ -29,7 +38,7 @@ export const Get = (path = ''): MethodDecorator => {
             path,
             method: RouteMethods.get,
             target,
-            propertyKey,
+            propertyKey
         });
     };
 };
@@ -40,7 +49,7 @@ export const Post = (path = ''): MethodDecorator => {
             path,
             method: RouteMethods.post,
             target,
-            propertyKey,
+            propertyKey
         });
     };
 };
@@ -51,7 +60,7 @@ export const Put = (path = ''): MethodDecorator => {
             path,
             method: RouteMethods.put,
             target,
-            propertyKey,
+            propertyKey
         });
     };
 };
@@ -62,7 +71,7 @@ export const Delete = (path = ''): MethodDecorator => {
             path,
             method: RouteMethods.delete,
             target,
-            propertyKey,
+            propertyKey
         });
     };
 };

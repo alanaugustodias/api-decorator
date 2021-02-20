@@ -1,5 +1,6 @@
+import {ApiPrefix, RouteParamType} from '../enum/index.js';
+
 import {RouteParam} from '../interfaces/index.js';
-import {RouteParamType} from '../enum/index.js';
 
 type RouteParamBuilder = {
     type: RouteParamType;
@@ -10,11 +11,11 @@ type RouteParamBuilder = {
 };
 
 function buildRouteParam({type, target, propertyKey, index, pathName}: RouteParamBuilder) {
-    if (!Reflect.hasMetadata('routeParams', target.constructor)) {
-        Reflect.defineMetadata('routeParams', [], target.constructor);
+    if (!Reflect.hasMetadata(ApiPrefix.ROUTE_PARAMS, target.constructor)) {
+        Reflect.defineMetadata(ApiPrefix.ROUTE_PARAMS, [], target.constructor);
     }
 
-    const routeParams = Reflect.getMetadata('routeParams', target.constructor) as Array<RouteParam>;
+    const routeParams = Reflect.getMetadata(ApiPrefix.ROUTE_PARAMS, target.constructor) as Array<RouteParam>;
     const requestRouteParamIdx = routeParams.findIndex((route) => route.methodName === propertyKey);
     let requestRouteParam = routeParams[requestRouteParamIdx];
 
@@ -22,24 +23,27 @@ function buildRouteParam({type, target, propertyKey, index, pathName}: RoutePara
         requestRouteParam.params.push({
             index,
             type,
-            pathName,
+            pathName
         });
+
+        requestRouteParam.params.sort(({index: indexA}, {index: indexB}) => indexA - indexB);
         routeParams[requestRouteParamIdx] = requestRouteParam;
-    } else {
+    }
+    else {
         requestRouteParam = {
             methodName: propertyKey,
             params: [
                 {
                     index,
                     type,
-                    pathName,
-                },
-            ],
+                    pathName
+                }
+            ]
         };
         routeParams.push(requestRouteParam);
     }
 
-    Reflect.defineMetadata('routeParams', routeParams, target.constructor);
+    Reflect.defineMetadata(ApiPrefix.ROUTE_PARAMS, routeParams, target.constructor);
 }
 
 export const Req = (): ParameterDecorator => {
@@ -48,7 +52,7 @@ export const Req = (): ParameterDecorator => {
             type: RouteParamType.REQUEST,
             target,
             propertyKey,
-            index,
+            index
         });
     };
 };
@@ -59,7 +63,7 @@ export const Res = (): ParameterDecorator => {
             type: RouteParamType.RESPONSE,
             target,
             propertyKey,
-            index,
+            index
         });
     };
 };
@@ -70,7 +74,7 @@ export const Body = (): ParameterDecorator => {
             type: RouteParamType.BODY,
             target,
             propertyKey,
-            index,
+            index
         });
     };
 };
@@ -81,7 +85,7 @@ export const Query = (): ParameterDecorator => {
             type: RouteParamType.QUERY,
             target,
             propertyKey,
-            index,
+            index
         });
     };
 };
@@ -93,7 +97,7 @@ export const Path = (pathName: string): ParameterDecorator => {
             target,
             propertyKey,
             index,
-            pathName,
+            pathName
         });
     };
 };

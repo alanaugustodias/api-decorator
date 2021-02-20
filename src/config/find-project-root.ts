@@ -18,9 +18,11 @@ function traverseFolder(directory: string, levels: number): string | null {
     const files = fs.readdirSync(directory);
     if (levels === 0) {
         return null;
-    } else if (markerExists(files)) {
+    }
+    else if (markerExists(files)) {
         return directory;
-    } else {
+    }
+    else {
         return traverseFolder(path.resolve(directory, '..'), levels - 1);
     }
 }
