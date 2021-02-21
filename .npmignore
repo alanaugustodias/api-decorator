@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+npm-debug.log
+
+# Build
+dist/
+
+src/
+.eslintignore
+.eslintrc
+.prettierrc
+babel.config.cjs
+jest.config.cjs
+tsconfig.json
+
+#Coverage Files
+coverage
+
+.env
