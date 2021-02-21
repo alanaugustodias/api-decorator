@@ -34,11 +34,12 @@ export default async function BindRoutes(): Promise<Router> {
 
                     // If no status is set on the Response, the default one is
                     if (!res.statusCode) {
-                        res.status(SucessfulRouteStatus[route.requestMethod]);
+                        return res.status(SucessfulRouteStatus[route.requestMethod]).send(result);
                     }
 
                     return res.send(result);
-                } catch (error) {
+                }
+                catch (error) {
                     if (!res.statusCode) {
                         res.status(400);
                     }
