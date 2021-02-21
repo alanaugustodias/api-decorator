@@ -2,9 +2,6 @@
 node_modules/
 npm-debug.log
 
-# Build
-dist/
-
 src/
 .eslintignore
 .eslintrc
