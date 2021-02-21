@@ -36,14 +36,17 @@ export default async function BindRoutes(): Promise<Router> {
                     if (!res.statusCode) {
                         return res.status(SucessfulRouteStatus[route.requestMethod]).send(result);
                     }
-
-                    return res.send(result);
+                    else {
+                        return res.send(result);
+                    }
                 }
                 catch (error) {
                     if (!res.statusCode) {
                         res.status(400);
                     }
-                    return res.send(error);
+                    else {
+                        return res.send(error);
+                    }
                 }
             });
         });

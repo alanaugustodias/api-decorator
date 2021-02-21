@@ -16,6 +16,7 @@ module.exports = {
     coverageReporters: ['json', 'lcov', 'text', 'clover'],
     collectCoverageFrom: [
         'dist/**/*.{js,jsx}',
+        '!dist/config/*.{js,jsx}',
         '!dist/**/index.{js,jsx}',
     ]
 };
