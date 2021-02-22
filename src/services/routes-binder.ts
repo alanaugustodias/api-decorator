@@ -25,7 +25,8 @@ function handleResult(result: any, res: Response, requestMethod: string) {
     // If no status is set on the Response, the default one is
     if (res.statusCode) {
         return res.send(result);
-    } else {
+    }
+    else {
         return res.status(SucessfulRouteStatus[requestMethod]).send(result);
     }
 }
@@ -55,10 +56,12 @@ export default async function BindRoutes(): Promise<Router> {
                     const result = await routeMethod.apply(Object.getPrototypeOf(instance), paramsMap);
 
                     return handleResult(result, res, route.requestMethod);
-                } catch (error) {
+                }
+                catch (error) {
                     if (res.statusCode) {
                         return res.send(error);
-                    } else {
+                    }
+                    else {
                         res.status(400);
                     }
                 }
