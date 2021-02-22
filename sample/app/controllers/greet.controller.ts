@@ -6,26 +6,31 @@ import { GreetService } from '../services/index.js';
 import { Injectables } from '../constants/index.js';
 import { Greetings } from '../enum/index.js';
 
-console.log('@@@@@@@@', GreetService)
-
 @Controller('/greet')
 export default class GreetController {
     @Inject(Injectables.GreetService)
     private greetService: GreetService;
 
     @Post()
-    public greet(@Body() body: Greet, @Res() res: Response): GreetResponse | undefined {
+    public greet(@Body() body: Greet, @Res() res: Response): ApiResponse {
         try {
-            console.log(this.greetService);
             const greet: Greet = body;
             this.greetService.greet(greet);
-            return { message: 'Greeted successfully!' };
+            return {
+                status: 200, // Any status here you want to return
+                data: { // Any data format you need
+                    message: 'Greeted successfully!'
+                }
+            };
         }
         catch (error) {
-            res.status(400).json({
-                message: 'Couldn\'t greet.',
-                reason: JSON.stringify(error)
-            });
+            return {
+                status: 400, // Any status here you want to return
+                data: { // Any data format you need
+                    message: 'Couldn\'t greet.',
+                    reason: JSON.stringify(error)
+                }
+            };
         }
     }
 
