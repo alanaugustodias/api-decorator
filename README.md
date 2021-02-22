@@ -63,9 +63,13 @@ That's the main purpose of this library: to help you improving the quality of yo
 
 To start using the decorators for the API (resources), you should firstly follow a minimum standard, so that this library can do its best to help you out.
 
+
+[** Project Sample **](https://github.com/alanaugustodias/api-decorator/tree/master/sample)
+
+
 ### Controllers
 
-I'm calling here _Controllers_ the files where you're about to put your resources declarations.
+I'm calling here *Controllers* the files where you're about to put your resources declarations.
 
 They must export as default a class, which will be instantiated and associated on Express.
 
@@ -110,7 +114,23 @@ After having your controllers created, you should export them in a `index` file,
 export {default as UserController} from './user.controller.ts';
 ```
 
-Now, you only have to tell _api-decorator_ where your main controllers exporter is located.
+- Pro-tip:
+
+When writing a Controller, you can return an object of type `ApiResponse`.
+
+This interface handles `status` and `data`, so that you don't need to inject `@Res` just for sending a custom status.
+
+`ApiResponse` shape:
+
+```javascript
+interface ApiResponse {
+    status: number;
+    data: any;
+}
+```
+
+
+Now, you only have to tell *api-decorator* where your main controllers exporter is located.
 
 You can create a config file, according to the [Configs](#configs) section.
 
@@ -139,15 +159,6 @@ This is the function that, with the help of the configuration file on finding th
 After having the result of the asynchronous `BindRoutes`, you can just use it with the prefix you want for your API, just like: `api.use('/any-thing-you-want', routesBinded)`.
 
 ---
-
-
-
-
-
-
-
-
-
 
 ### Injectables
 

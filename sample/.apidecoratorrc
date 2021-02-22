@@ -1,0 +1,3 @@
+{
+  "controllers": "dist/controllers/index.js"
+}

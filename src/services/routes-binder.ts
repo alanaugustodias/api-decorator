@@ -9,6 +9,28 @@ import {transformRouteParams} from './params-handler.js';
 const getRouteMethod = (key: string) => (obj: Record<string, any>) => obj[key];
 
 /**
+ * Handles the result of an Endpoint
+ * When passing result as type of ApiResponse, we return its status and data
+ * When no status is passed (neither ApiResponse nor res.status) we set the default
+ * @param result 
+ * @param res 
+ * @param requestMethod 
+ */
+function handleResult(result: any, res: Response, requestMethod: string) {
+    // When returning an ApiResponse interface, we use the status and data on it to resolve the response
+    if ('status' in result && 'data' in result) {
+        return res.status(result.status).send(result.data);
+    }
+
+    // If no status is set on the Response, the default one is
+    if (res.statusCode) {
+        return res.send(result);
+    } else {
+        return res.status(SucessfulRouteStatus[requestMethod]).send(result);
+    }
+}
+
+/**
  * Bind Controllers's Routes to the Express's Routers
  */
 export default async function BindRoutes(): Promise<Router> {
@@ -32,19 +54,11 @@ export default async function BindRoutes(): Promise<Router> {
                     // Result for the endpoint's method
                     const result = await routeMethod.apply(Object.getPrototypeOf(instance), paramsMap);
 
-                    // If no status is set on the Response, the default one is
-                    if (res.statusCode) {
-                        return res.send(result);
-                    }
-                    else {
-                        return res.status(SucessfulRouteStatus[route.requestMethod]).send(result);
-                    }
-                }
-                catch (error) {
+                    return handleResult(result, res, route.requestMethod);
+                } catch (error) {
                     if (res.statusCode) {
                         return res.send(error);
-                    }
-                    else {
+                    } else {
                         res.status(400);
                     }
                 }
